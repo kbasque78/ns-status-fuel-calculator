@@ -1,1 +1,100 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>NS Status Fuel Calculator</title><link rel='stylesheet' href='style.css'></head><body><h1>NS Status Fuel Calculator</h1><div class='card'><label>Pump Price</label><input id='pumpPrice' type='number' step='0.001' value='1.976'><button onclick='generate()'>Generate Cheat Sheet</button><h3>Status Price</h3><p id='statusPrice'></p><h3>Worked Example ($5)</h3><pre id='math'></pre></div><div class='card'><h2>Cheat Sheet</h2><pre id='sheet'></pre><button onclick='window.print()'>Print / Save PDF</button><button onclick='copySheet()'>Copy</button></div><script src='script.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NS Status Fuel Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Left Side: Controls & Worked Example -->
+        <aside class="control-panel no-print">
+            <header class="panel-header">
+                <i class="fa-solid fa-gas-pump pump-icon"></i>
+                <div>
+                    <h1>NS Status Fuel Calculator</h1>
+                    <p class="subtitle">Cheat Sheet Generator</p>
+                </div>
+            </header>
+
+            <div class="input-group">
+                <label for="pumpPriceInput">Pump Price ($ / Litre)</label>
+                <div class="input-wrapper">
+                    <span class="currency-prefix">$</span>
+                    <input type="number" id="pumpPriceInput" step="0.001" min="0.001" placeholder="1.659">
+                </div>
+            </div>
+
+            <div class="status-display-card">
+                <span class="status-label">Calculated Status Price</span>
+                <span id="statusPriceDisplay" class="status-value">$--.--</span>
+            </div>
+
+            <button id="generateBtn" class="btn btn-primary">
+                <i class="fa-solid fa-bolt"></i> Generate Cheat Sheet
+            </button>
+
+            <!-- Worked Example Section -->
+            <section class="worked-example">
+                <h2>Worked Example ($5.00)</h2>
+                <div class="formula-box">
+                    <p><strong>Status Price:</strong> (Pump ÷ 1.14) − 0.155</p>
+                    <p><strong>Litres:</strong> Customer Amount ÷ Status Price</p>
+                    <p><strong>Pump Amount:</strong> Litres × Pump Price</p>
+                </div>
+                <div id="exampleOutput" class="example-output">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </section>
+
+            <!-- Pump Price History Section -->
+            <section class="history-section">
+                <h2>Price History</h2>
+                <ul id="historyList" class="history-list">
+                    <!-- Populated via localStorage -->
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Right Side: Printable White Cheat Sheet -->
+        <main class="sheet-panel">
+            <div class="action-toolbar no-print">
+                <button id="printBtn" class="btn btn-secondary"><i class="fa-solid fa-print"></i> Print</button>
+                <button id="pdfBtn" class="btn btn-secondary"><i class="fa-solid fa-file-pdf"></i> Save PDF</button>
+                <button id="downloadBtn" class="btn btn-secondary"><i class="fa-solid fa-download"></i> Download</button>
+                <button id="copyBtn" class="btn btn-secondary"><i class="fa-solid fa-copy"></i> Copy</button>
+            </div>
+
+            <div id="cheatSheet" class="cheat-sheet-paper">
+                <div class="sheet-header">
+                    <h2>Nova Scotia Tax-Exempt Fuel Cheat Sheet</h2>
+                    <p id="sheetMeta">Pump Price: $--.-- | Status Price: $--.--</p>
+                </div>
+                
+                <table class="cheat-table">
+                    <thead>
+                        <tr>
+                            <th>Customer Pays</th>
+                            <th>Pump Total to Enter</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cheatSheetBody">
+                        <!-- Generated rows ($5 - $100) -->
+                         <tr>
+                            <td colspan="2" class="placeholder-row">Enter a pump price and click generate.</td>
+                         </tr>
+                    </tbody>
+                </table>
+                <div class="sheet-footer">
+                    <p>Calculations use unrounded intermediate values. Final Pump Totals rounded to the nearest cent.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
