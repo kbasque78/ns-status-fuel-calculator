@@ -24,7 +24,6 @@ body {
     min-height: 100vh;
 }
 
-/* Layout: Two columns desktop, single column mobile */
 .app-layout {
     display: grid;
     grid-template-columns: 420px 1fr;
@@ -37,12 +36,10 @@ body {
     }
 }
 
-/* Headings color requirement */
 h1, h2, h3, .panel-header h1 {
     color: var(--accent-purple);
 }
 
-/* Control Panel (Left) */
 .control-panel {
     background-color: var(--bg-panel);
     border-right: 1px solid var(--border-color);
@@ -185,7 +182,6 @@ h1, h2, h3, .panel-header h1 {
     line-height: 1.5;
 }
 
-/* History Section */
 .history-section {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -217,7 +213,6 @@ h1, h2, h3, .panel-header h1 {
     background: rgba(255,255,255,0.05);
 }
 
-/* Sheet Panel (Right) */
 .sheet-panel {
     padding: 24px;
     display: flex;
@@ -247,7 +242,6 @@ h1, h2, h3, .panel-header h1 {
     background: #333;
 }
 
-/* Printable White Sheet Preview Container */
 .cheat-sheet-paper {
     background: #ffffff;
     color: #000000;
@@ -266,7 +260,6 @@ h1, h2, h3, .panel-header h1 {
     justify-content: center;
 }
 
-/* Narrow Cheat Sheet Strip Styles matching image layout */
 .strip {
     width: 220px;
     border: 1px solid #000;
@@ -311,51 +304,32 @@ h1, h2, h3, .panel-header h1 {
     font-size: 0.9rem;
 }
 
-/* Strict Single-Page Print CSS */
+/* TEST VERSION 1 PRINT CSS */
 @media print {
-    /* Hide everything on the page by default */
     body * {
-        visibility: hidden;
+        visibility: hidden !important;
     }
 
-    /* Reset body and layout for printing */
     html, body {
         background: #ffffff !important;
         color: #000000 !important;
-        height: 100% !important;
+        height: auto !important;
         margin: 0 !important;
         padding: 0 !important;
-        overflow: hidden !important;
     }
 
-    /* Make the cheat sheet paper and all its children fully visible */
     .cheat-sheet-paper, 
     .cheat-sheet-paper * {
         visibility: visible !important;
     }
 
-    /* Position the cheat sheet container perfectly centered and scaled for one single page */
     .cheat-sheet-paper {
-        position: absolute !important;
-        left: 50% !important;
-        top: 45% !important;
-        transform: translate(-50%, -50%) !important;
-        width: 100% !important;
-        max-width: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #ffffff !important;
         box-shadow: none !important;
         border: none !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        page-break-after: avoid !important;
-        break-after: avoid !important;
-        page-break-before: avoid !important;
-        break-before: avoid !important;
+        display: block !important;
     }
 
     .strips-container {
