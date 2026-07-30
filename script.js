@@ -3,9 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusDisplay = document.getElementById('statusPriceDisplay');
     const generateBtn = document.getElementById('generateBtn');
     const exampleOutput = document.getElementById('exampleOutput');
-    const cheatSheetBody = document.getElementById('cheatSheetBody');
-    const sheetMeta = document.getElementById('sheetMeta');
     const historyList = document.getElementById('historyList');
+
+    const stripHeader1 = document.getElementById('stripHeader1');
+    const stripHeader2 = document.getElementById('stripHeader2');
+    const stripBody1 = document.getElementById('stripBody1');
+    const stripBody2 = document.getElementById('stripBody2');
 
     const printBtn = document.getElementById('printBtn');
     const pdfBtn = document.getElementById('pdfBtn');
@@ -38,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const statusPrice = calculateStatusPrice(pumpPrice);
-        generateCheatSheet(pumpPrice, statusPrice);
+        generateCheatSheet(pumpPrice);
         saveToHistory(pumpPrice);
     });
 
@@ -64,23 +67,30 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
-    function generateCheatSheet(pumpPrice, statusPrice) {
-        sheetMeta.textContent = `Pump Price: $${pumpPrice.toFixed(3)} | Status Price: $${statusPrice.toFixed(3)}`;
-        cheatSheetBody.innerHTML = '';
+    function generateCheatSheet(pumpPrice) {
+        const statusPrice = calculateStatusPrice(pumpPrice);
+        const headerText = `${pumpPrice.toFixed(3)}/L`;
+        
+        stripHeader1.textContent = headerText;
+        stripHeader2.textContent = headerText;
 
-        // Generate values from $5 through $100 in steps of $5
+        let rowsHTML = '';
         for (let amount = 5; amount <= 100; amount += 5) {
             const litres = amount / statusPrice;
             const exactPumpTotal = litres * pumpPrice;
             const finalPumpTotal = Math.round(exactPumpTotal * 100) / 100;
 
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td><strong>$${amount.toFixed(2)}</strong></td>
-                <td><strong>$${finalPumpTotal.toFixed(2)}</strong></td>
+            rowsHTML += `
+                <div class="strip-row">
+                    <span>${amount}</span>
+                    <span class="col-dash">-</span>
+                    <span class="col-val">${finalPumpTotal.toFixed(2)}</span>
+                </div>
             `;
-            cheatSheetBody.appendChild(row);
         }
+
+        stripBody1.innerHTML = rowsHTML;
+        stripBody2.innerHTML = rowsHTML;
     }
 
     // LocalStorage Management
@@ -124,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     downloadBtn.addEventListener('click', () => {
         const sheetHtml = document.getElementById('cheatSheet').outerHTML;
-        const blob = new Blob([`<!DOCTYPE html><html><head><title>Cheat Sheet</title><style>body{font-family:sans-serif;padding:20px;}.cheat-table{width:100%;border-collapse:collapse;}th,td{border:1px solid #ccc;padding:8px;text-align:right;}th:first-child,td:first-child{text-align:left;}th{background:#f0f0f0;}.sheet-header{text-align:center;margin-bottom:20px;}</style></head><body>${sheetHtml}</body></html>`], { type: 'text/html' });
+        const blob = new Blob([`<!DOCTYPE html><html><head><title>Cheat Sheet</title><style>body{font-family:Arial,sans-serif;padding:20px;display:flex;justify-content:center;}.strips-container{display:flex;gap:24px;}.strip{width:220px;border:1px solid #000;background:#fff;}.strip-header{border-bottom:1px solid #000;text-align:center;font-weight:bold;font-size:1.15rem;padding:8px 0;}.strip-body{padding:4px 12px;}.strip-row{display:flex;justify-content:space-between;font-size:1rem;padding:3px 0;font-weight:500;}.col-dash{padding:0 6px;}</style></head><body>${sheetHtml}</body></html>`], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -134,18 +144,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     copyBtn.addEventListener('click', () => {
-        const rows = cheatSheetBody.querySelectorAll('tr');
-        if (rows.length === 0 || rows[0].classList.contains('placeholder-row')) {
+        const rows = stripBody1.querySelectorAll('.strip-row');
+        if (rows.length === 0 || stripBody1.querySelector('.placeholder-text')) {
             alert('Please generate the cheat sheet first.');
             return;
         }
-        let textToCopy = "Nova Scotia Tax-Exempt Fuel Cheat Sheet\n\n";
+        let textToCopy = `Nova Scotia Tax-Exempt Fuel Cheat Sheet (${stripHeader1.textContent})\n\n`;
         rows.forEach(row => {
-            const cols = row.querySelectorAll('td');
-            textToCopy += `Customer Pays: ${cols[0].innerText} | Pump Total to Enter: ${cols[1].innerText}\n`;
+            const spans = row.querySelectorAll('span');
+            textToCopy += `${spans[0].innerText} - ${spans[2].innerText}\n`;
         });
         navigator.clipboard.writeText(textToCopy).then(() => {
-            alert('Cheat sheet copied to clipboard!');
+            alert('Cheat sheet strip copied to clipboard!');
         });
     });
 });
