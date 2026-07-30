@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Helper to print/save isolated temporary document containing only the strips
+    // Helper to print/save isolated temporary document without ever navigating to about:blank
     function triggerIsolatedPrint() {
         const stripsContainerHtml = document.querySelector('.strips-container').outerHTML;
         if (stripBody1.querySelector('.placeholder-text')) {
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const printWindow = window.open('', '_blank', 'width=800,height=900');
+        const printWindow = window.open('', '_blank');
         if (!printWindow) {
             alert('Please allow popups for printing.');
             return;
@@ -199,7 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         window.onload = function() {
             setTimeout(function() {
                 window.print();
-                window.close();
+                // Attempt to close window safely; if blocked by browser/Safari policy, leave it open instead of about:blank
+                setTimeout(function() {
+                    try {
+                        window.close();
+                    } catch(e) {}
+                }, 500);
             }, 250);
         };
     <\/script>
