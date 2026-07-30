@@ -123,13 +123,98 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Helper to print/save isolated temporary document containing only the strips
+    function triggerIsolatedPrint() {
+        const stripsContainerHtml = document.querySelector('.strips-container').outerHTML;
+        if (stripBody1.querySelector('.placeholder-text')) {
+            alert('Please generate the cheat sheet first.');
+            return;
+        }
+
+        const printWindow = window.open('', '_blank', 'width=800,height=900');
+        if (!printWindow) {
+            alert('Please allow popups for printing.');
+            return;
+        }
+
+        printWindow.document.write(`<!DOCTYPE html>
+<html>
+<head>
+    <title>NS Fuel Cheat Sheet</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #fff;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .strips-container {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+        }
+        .strip {
+            width: 220px;
+            border: 1px solid #000;
+            background: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .strip-header {
+            border-bottom: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.15rem;
+            padding: 8px 0;
+            background: #fff;
+        }
+        .strip-body {
+            padding: 4px 12px;
+        }
+        .strip-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            padding: 3px 0;
+            font-weight: 500;
+        }
+        .strip-row .col-val {
+            text-align: right;
+        }
+        .strip-row .col-dash {
+            text-align: center;
+            padding: 0 6px;
+        }
+        @page {
+            size: letter portrait;
+            margin: 0.4in;
+        }
+    </style>
+</head>
+<body>
+    ${stripsContainerHtml}
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+                window.close();
+            }, 250);
+        };
+    <\/script>
+</body>
+</html>`);
+        printWindow.document.close();
+    }
+
     // Toolbar Action Handlers
     printBtn.addEventListener('click', () => {
-        window.print();
+        triggerIsolatedPrint();
     });
 
     pdfBtn.addEventListener('click', () => {
-        window.print();
+        triggerIsolatedPrint();
     });
 
     downloadBtn.addEventListener('click', () => {
