@@ -311,39 +311,65 @@ h1, h2, h3, .panel-header h1 {
     font-size: 0.9rem;
 }
 
-/* Print Mode Requirements */
+/* Strict Single-Page Print CSS */
 @media print {
+    /* Hide everything on the page by default */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Reset body and layout for printing */
     html, body {
-        height: auto;
-        margin: 0;
-        padding: 0;
-        background: #fff;
-        color: #000;
+        background: #ffffff !important;
+        color: #000000 !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
     }
-    .no-print {
-        display: none !important;
+
+    /* Make the cheat sheet paper and all its children fully visible */
+    .cheat-sheet-paper, 
+    .cheat-sheet-paper * {
+        visibility: visible !important;
     }
-    .app-layout {
-        display: block;
-        min-height: auto;
-    }
-    .sheet-panel {
-        padding: 0;
-        margin: 0;
-        overflow: visible;
-    }
+
+    /* Position the cheat sheet container perfectly centered and scaled for one single page */
     .cheat-sheet-paper {
-        box-shadow: none;
-        max-width: 100%;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        page-break-inside: avoid;
-        break-inside: avoid;
+        position: absolute !important;
+        left: 50% !important;
+        top: 45% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        border: none !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+        page-break-before: avoid !important;
+        break-before: avoid !important;
     }
+
+    .strips-container {
+        display: flex !important;
+        gap: 24px !important;
+        justify-content: center !important;
+        background: #ffffff !important;
+    }
+
+    .strip {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+    }
+
     @page {
         size: letter portrait;
         margin: 0.4in;
